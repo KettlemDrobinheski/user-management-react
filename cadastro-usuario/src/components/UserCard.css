@@ -2,11 +2,13 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  width: 100%;
   padding: 20px;
+  margin-bottom: 20px;
   background-color: #141414;
   border-radius: 15px;
-  border: 1px solid #ff2d95
-  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(255, 45, 149, 0.2);
+
 }
 
 .user-card-avatar {
@@ -14,8 +16,24 @@
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
+  border: 3px solid #ff2d95;
+
 }
 
 .user-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: white;
 
+}
+
+.user-card-info p {
+  margin: 0;
+  font-size: 17px;
+}
+
+.user-card-info span {
+  color: #ff69b4;
+  font-weight: bold;
 }

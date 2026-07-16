@@ -1,13 +1,12 @@
 import './UserCard.css'
 
 function UserCard({user}){
-
     return(
-        <div className="User-card">
-
+        <div className="user-card">
             <img 
                 className="user-card-avatar" 
-                src={`https://robohash.org/${user.id}`} 
+                src={`https://robohash.org/${user.id}.png`}
+                alt={user.name} 
             />
 
             <div className="user-card-info">
