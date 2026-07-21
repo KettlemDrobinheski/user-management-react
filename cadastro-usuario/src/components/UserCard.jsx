@@ -1,6 +1,6 @@
 import './UserCard.css'
 
-function UserCard({user, deleterUser}){
+function UserCard({user, deleteUser}){
     return(
         <div className="user-card">
             <img 
@@ -14,7 +14,7 @@ function UserCard({user, deleterUser}){
                 <p>Email: {user.email}</p>
                 <p>Idade: {user.age}</p>
 
-                <button onClick={() => deleterUser(user.id)}>
+                <button onClick={() => deleteUser(user.id)}>
                     Excluir
                 </button>
             </div>
