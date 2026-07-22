@@ -9,6 +9,10 @@ function App() {
   const [users, setUsers] = useState([]);
 }
 
+function excluirUsuario(id) {
+    setUsers(users.filter(user => user.id !== id))
+  }
+  
   function buscarUsuarios() {
     fetch('https://jsonplaceholder.typicode.com/users', {
       method: 'POST',
@@ -92,7 +96,7 @@ function App() {
       <UserCard 
       key={user.id} 
       user={user}
-      deleteUser={deleteUser}
+      onDelete={excluirUsuario}
       />
 ))}
       </div>
