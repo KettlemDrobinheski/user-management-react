@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
 import './App.css'
 import UserCard from './components/UserCard'
 
@@ -6,7 +6,26 @@ function App() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
+}
+
+  function buscarUsuarios() {
+    fetch('https://jsonplaceholder.typicode.com/users', {
+      method: 'POST',
+      body: JSON.stringify(newUser),
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+      .then((resposta) => resposta.json())
+      .then((dados) => { 
+        setUsers([...users, dados])
+      })
+
+  useEffect(() => {
+    buscarUsuarios();
+    console.log("Componente carregou!");
+  }, []);
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -25,10 +44,18 @@ function App() {
     setAge('')
   }
 
+  function deleteUser(id) {
+  setUsers(
+    users.filter((user) => user.id !== id)
+  )
+}
+
   return (
     <div className="App">
 
       <h1>Cadastro de Usuários</h1>
+
+      <p>Total de Ususarios: {users.length}</p>
 
       <form onSubmit={handleSubmit}>
 
@@ -64,14 +91,10 @@ function App() {
 {users.map((user) => (
       <UserCard 
       key={user.id} 
-      user={user} />
+      user={user}
+      deleteUser={deleteUser}
+      />
 ))}
-
-function deleteUser(id) {
-  setUsers(
-    users.filter((user) => user.id !== ide)
-  )
-}
       </div>
 
     </div>

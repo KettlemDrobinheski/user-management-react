@@ -14,9 +14,9 @@ function UserCard({user, deleteUser}){
                 <p>Email: {user.email}</p>
                 <p>Idade: {user.age}</p>
 
-                <button onClick={() => deleteUser(user.id)}>
-                    Excluir
-                </button>
+              <button onClick={() => deleteUser(user.id)}>
+                Excluir
+              </button>
             </div>
 
         </div>
