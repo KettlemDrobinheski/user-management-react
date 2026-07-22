@@ -7,24 +7,15 @@ function App() {
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
   const [users, setUsers] = useState([]);
-}
-
-function excluirUsuario(id) {
-    setUsers(users.filter(user => user.id !== id))
-  }
   
+
   function buscarUsuarios() {
-    fetch('https://jsonplaceholder.typicode.com/users', {
-      method: 'POST',
-      body: JSON.stringify(newUser),
-      headers: {
-        'content-type': 'application/json'
-      }
-    })
+    fetch('https://jsonplaceholder.typicode.com/users')
       .then((resposta) => resposta.json())
       .then((dados) => { 
-        setUsers([...users, dados])
+        setUsers(dados)
       })
+  }
 
   useEffect(() => {
     buscarUsuarios();
@@ -49,10 +40,8 @@ function excluirUsuario(id) {
   }
 
   function deleteUser(id) {
-  setUsers(
-    users.filter((user) => user.id !== id)
-  )
-}
+    setUsers(users.filter((user) => user.id !== id))
+  }
 
   return (
     <div className="App">
@@ -96,7 +85,7 @@ function excluirUsuario(id) {
       <UserCard 
       key={user.id} 
       user={user}
-      onDelete={excluirUsuario}
+      onDelete={deleteUser}
       />
 ))}
       </div>
