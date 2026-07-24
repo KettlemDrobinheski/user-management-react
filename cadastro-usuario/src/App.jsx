@@ -25,6 +25,11 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault()
 
+    if (!name || !email || !age) {
+      alert("preencha todos os campos")
+      return
+    }
+
     const newUser = {
       id: Date.now(),
       name,
