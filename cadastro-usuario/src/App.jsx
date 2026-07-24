@@ -30,6 +30,13 @@ function App() {
       return
     }
 
+    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    
+    if (!emailValido) {
+      alert("digite um email válido")
+      return
+    }
+
     const newUser = {
       id: Date.now(),
       name,
