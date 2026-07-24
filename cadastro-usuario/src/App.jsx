@@ -12,7 +12,7 @@ function App() {
 
     return savedUsers ? JSON.parse(savedUsers) : []
   });
-  ss
+  
 
   function buscarUsuarios() {
     fetch('https://jsonplaceholder.typicode.com/users')
@@ -79,7 +79,7 @@ function App() {
 
       <h1>Cadastro de Usuários</h1>
 
-      <p>Total de Ususarios: {users.length}</p>
+      <p>Total de Usuarios: {users.length}</p>
 
       <form onSubmit={handleSubmit}>
 
