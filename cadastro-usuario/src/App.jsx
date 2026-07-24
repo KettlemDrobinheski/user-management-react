@@ -30,10 +30,17 @@ function App() {
       return
     }
 
+    const nomeValido = /^[A-Za-zÀ-ÿ\s]+$/.test(name);
+
+    if (!nomeValido) {
+      alert("Digite um nome válido")
+      return
+    }
+
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    
+
     if (!emailValido) {
-      alert("digite um email válido")
+      alert("Digite um email válido")
       return
     }
 
