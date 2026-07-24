@@ -12,7 +12,7 @@ function App() {
 
     return savedUsers ? JSON.parse(savedUsers) : []
   });
-  
+  ss
 
   function buscarUsuarios() {
     fetch('https://jsonplaceholder.typicode.com/users')
