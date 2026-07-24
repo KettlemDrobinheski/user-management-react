@@ -6,7 +6,12 @@ function App() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
-  const [users, setUsers] = useState([]);
+
+  const [users, setUsers] = useState(() => {
+    const savedUsers = localStorage.getItem('users')
+
+    return savedUsers ? JSON.parse(savedUsers) : []
+  });
   
 
   function buscarUsuarios() {
@@ -18,7 +23,6 @@ function App() {
   }
 
   useEffect(() => {
-    buscarUsuarios();
     console.log("Componente carregou!");
   }, []);
 
@@ -51,7 +55,11 @@ function App() {
       age,
     }
 
-    setUsers([...users, newUser])
+   const updatedUsers = [...users, newUser]
+
+   setUsers(updatedUsers)
+
+   localStorage.setItem('users', JSON.stringify(updatedUsers))
 
     setName('')
     setEmail('')
@@ -59,7 +67,11 @@ function App() {
   }
 
   function deleteUser(id) {
-    setUsers(users.filter((user) => user.id !== id))
+    const updatedUsers = users.filter((user) => user.id !== id)
+
+    setUsers(updatedUsers)
+
+    localStorage.setItem('users', JSON.stringify(updatedUsers))
   }
 
   return (
