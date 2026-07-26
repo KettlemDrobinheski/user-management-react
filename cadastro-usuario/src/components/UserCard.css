@@ -2,13 +2,20 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  width: 100%;
-  padding: 20px;
-  margin-bottom: 20px;
+  width: 600px;
+  height: 120px;
+  padding: 15px 20px;
   background-color: #141414;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(255, 45, 149, 0.2);
 
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
 }
 
 .user-card-avatar {
