@@ -15,6 +15,10 @@ function App() {
   
   const [editingUser, setEditingUser] = useState(null);
 
+  useEffect(() => {
+    localStorage.setItem('users', JSON.stringify(users))
+  }, [users])
+
 
   function buscarUsuarios() {
     fetch('https://jsonplaceholder.typicode.com/users')
@@ -50,18 +54,26 @@ function App() {
       return
     }
 
-    const newUser = {
-      id: Date.now(),
-      name,
-      email,
-      age,
+    if (editingUser) {
+      const updatedUsers = users.map((user) =>
+      user.id === editingUser.id
+    ? { ...user, name, email, age }
+    : user
+)
+
+setUsers (updatedUsers)
+setEditingUser(null)
+
+    } else {
+      const newUser = {
+        id: Date.now(),
+        name,
+        email,
+        age,
+      }
+
+      setUsers([...users, newUser])
     }
-
-   const updatedUsers = [...users, newUser]
-
-   setUsers(updatedUsers)
-
-   localStorage.setItem('users', JSON.stringify(updatedUsers))
 
     setName('')
     setEmail('')
@@ -116,8 +128,22 @@ function App() {
         />
 
         <button type="submit">
-          Cadastrar
+          {editingUser ? "Atualizar" : "Cadastrar"}
         </button>
+
+        {editingUser && (
+          <button
+          type="button"
+          onClick={() => {
+            setEditingUser(null)
+            setName('')
+            setEmail('')
+            setAge('')
+          }}
+          >
+            Cancelar Edição
+          </button>
+        )}
 
       </form>
 
