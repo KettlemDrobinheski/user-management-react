@@ -13,6 +13,8 @@ function App() {
     return savedUsers ? JSON.parse(savedUsers) : []
   });
   
+  const [editingUser, setEditingUser] = useState(null);
+
 
   function buscarUsuarios() {
     fetch('https://jsonplaceholder.typicode.com/users')
@@ -74,6 +76,15 @@ function App() {
     localStorage.setItem('users', JSON.stringify(updatedUsers))
   }
 
+   function editUser(user) {
+    setEditingUser(user);
+    
+    setName(user.name);
+    setEmail(user.email);
+    setAge(user.age);
+  }
+
+
   return (
     <div className="App">
 
@@ -117,6 +128,7 @@ function App() {
       key={user.id} 
       user={user}
       onDelete={deleteUser}
+      onEdit={editUser}
       />
 ))}
       </div>

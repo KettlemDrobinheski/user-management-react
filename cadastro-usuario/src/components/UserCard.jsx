@@ -1,6 +1,7 @@
 import './UserCard.css'
 
-function UserCard({user, onDelete, onEdit}){
+function UserCard({ user, onDelete, onEdit }) {
+  console.log(onEdit);
     return(
         <div className="user-card">
             <img 
@@ -13,16 +14,13 @@ function UserCard({user, onDelete, onEdit}){
                 <p>Nome: {user.name}</p>
                 <p>Email: {user.email}</p>
                 <p>Idade: {user.age}</p>
+              </div>
 
-                <button onClick={() => onEdit(user)}>
-                  Editar
-                </button>
+              <div className="user-card-buttons">
+                <button onClick={() => onEdit(user)}>Editar</button>
 
-              <button onClick={() => onDelete(user.id)}>
-                Excluir
-              </button>
+              <button onClick={() => onDelete(user.id)}>Excluir</button>
             </div>
-
         </div>
     )
 
