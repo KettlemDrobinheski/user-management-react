@@ -4,6 +4,7 @@ import UserCard from './components/UserCard'
 
 function App() {
   const [name, setName] = useState('')
+  const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
 
@@ -54,10 +55,15 @@ function App() {
       return
     }
 
+    if (!validarCpf(cpf)) {
+      alert("Digite um CPF válido")
+      return
+    }
+
     if (editingUser) {
       const updatedUsers = users.map((user) =>
       user.id === editingUser.id
-    ? { ...user, name, email, age }
+    ? { ...user, name, cpf, email, age }
     : user
 )
 
@@ -68,6 +74,7 @@ setEditingUser(null)
       const newUser = {
         id: Date.now(),
         name,
+        cpf,
         email,
         age,
       }
@@ -76,6 +83,7 @@ setEditingUser(null)
     }
 
     setName('')
+    setCpf('')
     setEmail('')
     setAge('')
   }
@@ -92,8 +100,44 @@ setEditingUser(null)
     setEditingUser(user);
     
     setName(user.name);
+    setCpf(user.cpf);
     setEmail(user.email);
     setAge(user.age);
+  }
+
+  function formatCpf(value) {
+    return value
+    .replace(/\D/g, '')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+    .slice(0, 14);
+  }
+
+  function validarCpf(cpf) {
+    const cpfLimpo = cpf.replace(/\D/g, '')
+
+    if (cpfLimpo.length !== 11) {
+      return false
+    }
+
+    if (/^(\d)\1{10}$/.test(cpfLimpo)) {
+      return false
+    }
+
+    let soma = 0 
+
+    for (let i = 0; i < 9; i++) {
+      soma += Number(cpfLimpo[i]) * (10 - i)
+    }
+
+    let resto = soma % 11
+
+    let primeiroDigito = resto < 2 ? 0 : 11 - resto
+
+    if (primeiroDigito !== Number(cpfLimpo[9])) {
+      return false
+    }
   }
 
 
@@ -112,6 +156,13 @@ setEditingUser(null)
           value={name}
           onChange={(event) => setName(event.target.value)}
         />
+
+        <input 
+         placeholder="CPF"
+         type="text"
+         value={cpf}
+         onChange={(event) => setCpf(formatCpf(event.target.value))}
+         />
 
         <input
           placeholder="Email"

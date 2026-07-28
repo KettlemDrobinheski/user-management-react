@@ -12,8 +12,10 @@ function UserCard({ user, onDelete, onEdit }) {
 
             <div className="user-card-info">
                 <p>Nome: {user.name}</p>
+                <p>CPF: {user.cpf}</p>
                 <p>Email: {user.email}</p>
                 <p>Idade: {user.age}</p>
+              
               </div>
 
               <div className="user-card-buttons">
