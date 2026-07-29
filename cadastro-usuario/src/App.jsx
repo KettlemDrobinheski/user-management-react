@@ -8,6 +8,10 @@ function App() {
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
   const [cep, setCep] = useState('')
+  const [rua, setRua] = useState('')
+  const [bairro, setBairro] = useState('')
+  const [cidade, setCidade] = useState('')
+  const [estado, setEstado] = useState('')
 
   const [users, setUsers] = useState(() => {
     const savedUsers = localStorage.getItem('users')
@@ -112,6 +116,10 @@ setEditingUser(null)
         email,
         age,
         cep,
+        rua,
+        bairro,
+        cidade,
+        estado,
       }
 
       setUsers([...users, newUser])
@@ -122,6 +130,10 @@ setEditingUser(null)
     setEmail('')
     setAge('')
     setCep('')
+    setRua('')
+    setBairro('')
+    setCidade('')
+    setEstado('')
   }
 
   function deleteUser(id) {
@@ -214,6 +226,34 @@ setEditingUser(null)
     return true
   }
 
+  async function buscarCep() {
+    const cepLimpo = cep.replace(/\D/g, '')
+
+    console.log("CEP enviado para buscar:", cepLimpo)
+
+    if (cepLimpo.length !== 8) {
+      return
+    }
+    
+    const resposta = await fetch(
+      'https://viacep.com.br/ws/${cepLimpo}/json/'
+    )
+
+    const dados = await resposta.json()
+
+    console.log("Resposta da API:", dados)
+
+    if(dados.erro){
+      alert("CEP não encontrtado")
+      return
+    }
+
+    setRua(dados.logradouro)
+    setBairro(dados.bairro)
+    setCidade(dados.localidade)
+    setEstados(dados.uf)
+  }
+
   return (
     <div className="App">
 
@@ -255,8 +295,45 @@ setEditingUser(null)
           placeholder="CEP"
           type="text"
           value={cep}
-          onChange={(e) => setCep(formatCep(e.target.value))}
+          onChange={(e) => {
+            const valor = formatCep(e.target.value)
+            
+            setCep(valor)
+
+            if (valor.length === 9) {
+              buscarCep()
+            }
+          }}
         />
+
+        <input 
+         type="text"
+         placeholder="Rua"
+         value={rua}
+         readOnly
+         />
+
+         <input
+          type="text"
+          placeholder="Bairro"
+          value={bairro}
+          readOnly
+          />
+
+          <input
+           type="text"
+           placeholder="Cidade"
+           value={cidade}
+           readOnly
+           />
+
+           <input
+            type="text"
+            Placeholder="Estado"
+            value={estado}
+            readOnly
+            />
+
 
         <button type="submit">
           {editingUser ? "Atualizar" : "Cadastrar"}
