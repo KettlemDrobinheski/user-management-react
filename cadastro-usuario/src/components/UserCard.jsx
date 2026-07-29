@@ -15,6 +15,7 @@ function UserCard({ user, onDelete, onEdit }) {
                 <p>CPF: {user.cpf}</p>
                 <p>Email: {user.email}</p>
                 <p>Idade: {user.age}</p>
+                <p>CEP: {user.cep}</p>
               
               </div>
 

@@ -7,6 +7,7 @@ function App() {
   const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
+  const [cep, setCep] = useState('')
 
   const [users, setUsers] = useState(() => {
     const savedUsers = localStorage.getItem('users')
@@ -36,7 +37,7 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault()
 
-    if (!name || !email || !age || !cpf) {
+    if (!name || !email || !age || !cpf || !cep) {
       alert("preencha todos os campos")
       return
     }
@@ -58,6 +59,11 @@ function App() {
 
     if (!validarCpf(cpf)) {
       alert("Digite um CPF válido")
+      return
+    }
+
+    if (!validarCep(cep)) {
+      alert("Digite um CEP válido")
       return
     }
 
@@ -105,6 +111,7 @@ setEditingUser(null)
         cpf,
         email,
         age,
+        cep,
       }
 
       setUsers([...users, newUser])
@@ -114,6 +121,7 @@ setEditingUser(null)
     setCpf('')
     setEmail('')
     setAge('')
+    setCep('')
   }
 
   function deleteUser(id) {
@@ -182,6 +190,29 @@ setEditingUser(null)
     return true
   }
 
+  function formatCep(valor) {
+    const cepLimpo = valor.replace(/\D/g, '').slice(0, 8)
+
+      if (cepLimpo.length <= 5) {
+        return cepLimpo
+      }
+
+      return cepLimpo.replace(/(\d{5})(\d)/, '$1-$2')
+  }
+
+  function validarCep(cep) {
+    const cepLimpo = cep.replace(/\D/g, '')
+    
+    if (cepLimpo.length !== 8) {
+      return false
+    }
+
+    if  (/^(\d)\1{7}$/.test(cepLimpo)) {
+      return false
+    }
+
+    return true
+  }
 
   return (
     <div className="App">
@@ -218,6 +249,13 @@ setEditingUser(null)
           type="number"
           value={age}
           onChange={(event) => setAge(event.target.value)}
+        />
+
+        <input
+          placeholder="CEP"
+          type="text"
+          value={cep}
+          onChange={(e) => setCep(formatCep(e.target.value))}
         />
 
         <button type="submit">
