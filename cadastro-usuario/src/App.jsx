@@ -36,7 +36,7 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault()
 
-    if (!name || !email || !age) {
+    if (!name || !email || !age || !cpf) {
       alert("preencha todos os campos")
       return
     }
@@ -51,6 +51,7 @@ function App() {
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     if (!emailValido) {
+      console.log("CPF recusado:", cpf)
       alert("Digite um email válido")
       return
     }
@@ -59,6 +60,33 @@ function App() {
       alert("Digite um CPF válido")
       return
     }
+
+    const emailExiste = users.some(
+      user => user.email.toLowerCase() === email.toLowerCase()
+    )
+
+    if(emailExiste) {
+      alert("Esse email já está cadatrado")
+      return
+    }
+
+    const nomeExiste = users.some(
+      user => user.name.toLowerCase() === name.toLowerCase()
+    )
+
+    if (nomeExiste) {
+      alert("Esse nome já está cadastrado")
+      return
+    }
+
+  const cpfExiste = users.some(
+    user => user.cpf.replace(/\D/g, '') === cpf.replace(/\D/g, '')
+  )
+
+  if (cpfExiste) {
+    alert("Esse CPF já está cadastrado")
+    return
+  }
 
     if (editingUser) {
       const updatedUsers = users.map((user) =>
@@ -132,12 +160,26 @@ setEditingUser(null)
     }
 
     let resto = soma % 11
-
     let primeiroDigito = resto < 2 ? 0 : 11 - resto
 
     if (primeiroDigito !== Number(cpfLimpo[9])) {
       return false
     }
+
+    soma = 0
+
+    for (let i = 0; i < 10; i++) {
+      soma += Number(cpfLimpo[i]) * (11 -i)
+    }
+
+    resto = soma % 11
+    let segundoDigito = resto < 2 ? 0 : 11 - resto
+
+    if (segundoDigito !== Number(cpfLimpo[10])) {
+      return false
+    }
+
+    return true
   }
 
 
