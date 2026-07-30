@@ -113,3 +113,79 @@ button:hover {
   }
 
 }
+
+.success-message {
+  color: #00ff88;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.festa {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.festa span {
+  position: absolute;
+  bottom: -50px;
+  font-size: 45px;
+  animation: subirFesta 3s ease-in forwards;
+}
+
+
+.festa span:nth-child(1) {
+  left: 10%;
+}
+
+.festa span:nth-child(2) {
+  left: 25%;
+  animation-delay: 0.3s;
+}
+
+.festa span:nth-child(3) {
+  left: 40%;
+  animation-delay: 0.6s;
+}
+
+.festa span:nth-child(4) {
+  left: 55%;
+  animation-delay: 0.2s;
+}
+
+.festa span:nth-child(5) {
+  left: 70%;
+  animation-delay: 0.5s;
+}
+
+.festa span:nth-child(6) {
+  left: 85%;
+  animation-delay: 0.8s;
+}
+
+.festa span:nth-child(7) {
+  left: 50%;
+  animation-delay: 1s;
+}
+
+
+@keyframes subirFesta {
+
+  from {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-900px) rotate(360deg);
+  }
+
+}

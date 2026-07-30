@@ -13,6 +13,8 @@ function App() {
   const [bairro, setBairro] = useState('')
   const [cidade, setCidade] = useState('')
   const [estado, setEstado] = useState('')
+  const [mensagem, setMensagem] = useState('')
+  const [festa, setFesta] = useState(false)
 
   const [users, setUsers] = useState(() => {
     const savedUsers = localStorage.getItem('users')
@@ -36,8 +38,8 @@ function App() {
   }
 
   useEffect(() => {
-    console.log("Componente carregou!");
-  }, []);
+    console.log("Estado da mensagem mudou:", mensagem);
+  }, [mensagem]);
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -125,6 +127,15 @@ setEditingUser(null)
       }
 
       setUsers([...users, newUser])
+      setMensagem("Usuário cadastrado com sucesso! 🎉")
+
+      setFesta(true)
+
+      setTimeout(() => {
+        setFesta(false)
+      }, 3000)
+
+      console.log("Mensagem atual:", mensagem)
     }
 
     setName('')
@@ -266,7 +277,25 @@ console.log("Parametro recebidos:", cepDigitado)
   return (
     <div className="App">
 
+    {festa && (
+  <div className="festa">
+    <span>🎈</span>
+    <span>🎈</span>
+    <span>🎈</span>
+    <span>🎉</span>
+    <span>🎊</span>
+    <span>🎈</span>
+    <span>🎉</span>
+  </div>
+)}
+
       <h1>Cadastro de Usuários</h1>
+
+      {mensagem && (
+        <p className="success-message">
+          {mensagem}
+        </p>
+      )}
 
       <p>Total de Usuarios: {users.length}</p>
 
@@ -328,7 +357,7 @@ console.log("Parametro recebidos:", cepDigitado)
           value={numero}
           onChange={(e) => setNumero(e.target.value)}
          />
-         
+
          <input
           type="text"
           placeholder="Bairro"
