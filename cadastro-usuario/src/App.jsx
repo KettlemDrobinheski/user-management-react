@@ -9,6 +9,7 @@ function App() {
   const [age, setAge] = useState('')
   const [cep, setCep] = useState('')
   const [rua, setRua] = useState('')
+  const [numero, setNumero] = useState('')
   const [bairro, setBairro] = useState('')
   const [cidade, setCidade] = useState('')
   const [estado, setEstado] = useState('')
@@ -41,7 +42,7 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault()
 
-    if (!name || !email || !age || !cpf || !cep) {
+    if (!name || !email || !age || !cpf || !cep || !numero) {
       alert("preencha todos os campos")
       return
     }
@@ -117,6 +118,7 @@ setEditingUser(null)
         age,
         cep,
         rua,
+        numero,
         bairro,
         cidade,
         estado,
@@ -131,6 +133,7 @@ setEditingUser(null)
     setAge('')
     setCep('')
     setRua('')
+    setNumero('')
     setBairro('')
     setCidade('')
     setEstado('')
@@ -151,6 +154,7 @@ setEditingUser(null)
     setCpf(user.cpf);
     setEmail(user.email);
     setAge(user.age);
+    setCep(user.cep);
   }
 
   function formatCpf(value) {
@@ -226,32 +230,37 @@ setEditingUser(null)
     return true
   }
 
-  async function buscarCep() {
-    const cepLimpo = cep.replace(/\D/g, '')
+  async function buscarCep(cepDigitado) {
+console.log("Parametro recebidos:", cepDigitado)
 
-    console.log("CEP enviado para buscar:", cepLimpo)
+    const cepLimpo = cepDigitado.replace(/\D/g, '')
 
     if (cepLimpo.length !== 8) {
       return
     }
     
+    try {
     const resposta = await fetch(
-      'https://viacep.com.br/ws/${cepLimpo}/json/'
+      `https://viacep.com.br/ws/${cepLimpo}/json/`
     )
 
     const dados = await resposta.json()
 
-    console.log("Resposta da API:", dados)
-
-    if(dados.erro){
-      alert("CEP não encontrtado")
+    if(dados.erro) {
+      console.log("API retornou erro:", dados)
+      alert("CEP não encontrado")
       return
     }
 
     setRua(dados.logradouro)
     setBairro(dados.bairro)
     setCidade(dados.localidade)
-    setEstados(dados.uf)
+    setEstado(dados.uf)
+
+  } catch (erro) {
+    console.error("Erro ao buscar CEP:", erro)
+    alert("Erro ao buscar o CEP.")
+  }
   }
 
   return (
@@ -297,11 +306,11 @@ setEditingUser(null)
           value={cep}
           onChange={(e) => {
             const valor = formatCep(e.target.value)
-            
+
             setCep(valor)
 
             if (valor.length === 9) {
-              buscarCep()
+              buscarCep(valor)
             }
           }}
         />
@@ -313,6 +322,13 @@ setEditingUser(null)
          readOnly
          />
 
+         <input
+          placeholder="Número"
+          type="text"
+          value={numero}
+          onChange={(e) => setNumero(e.target.value)}
+         />
+         
          <input
           type="text"
           placeholder="Bairro"
@@ -329,7 +345,7 @@ setEditingUser(null)
 
            <input
             type="text"
-            Placeholder="Estado"
+            placeholder="Estado"
             value={estado}
             readOnly
             />
