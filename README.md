@@ -1,27 +1,57 @@
-# Cadastro de Usuários
+# Sistema de Cadastro de Usuários 🚀
 
-Aplicação desenvolvida em React com o objetivo de praticar a criação de componentes, organização de código e renderização de dados.
+Um sistema de cadastro de usuários desenvolvido em React, com foco em validações de dados, persistência de informações e melhoria da experiência do usuário.
 
-## Sobre o projeto
+A aplicação permite cadastrar, editar, excluir e gerenciar usuários, além de realizar a busca automática de endereço através do CEP utilizando uma API externa.
 
-O projeto consiste em uma aplicação que apresenta informações de usuários através de cards individuais.
+## Funcionalidades ✨
 
-Cada card exibe:
+* Cadastro de usuários
+* Edição de usuários
+* Exclusão de usuários
+* Persistência dos dados utilizando LocalStorage
+* Validação e máscara de CPF
+* Validação e máscara de CEP
+* Busca automática de endereço através do CEP (ViaCEP)
+* Preenchimento automático de:
 
-- Avatar do usuário
-- Nome
-- Email
-- Idade
+  * Rua
+  * Bairro
+  * Cidade
+  * Estado
+* Cadastro do número da residência
+* Verificação de dados duplicados:
 
-A aplicação foi desenvolvida utilizando componentes reutilizáveis do React, permitindo uma estrutura mais organizada e fácil de manter.
+  * Nome
+  * Email
+  * CPF
+* Mensagens de sucesso após ações realizadas
+* Animação de comemoração após cadastro realizado com sucesso 🎉
 
-## Tecnologias utilizadas
+## Tecnologias utilizadas 💻
 
-- React.js
-- JavaScript
-- HTML5
-- CSS3
-- Vite
+* React
+* JavaScript
+* HTML5
+* CSS3
+* Vite
+* API ViaCEP
+* LocalStorage
+
+## Validações implementadas 🛡️
+
+* Campos obrigatórios
+* Validação de nome
+* Validação de email
+* Validação matemática de CPF
+* Validação de CEP
+* Bloqueio de cadastros duplicados
+
+## Objetivo do projeto 🎯
+
+Este projeto foi desenvolvido para praticar conceitos de desenvolvimento Front-End, consumo de APIs, manipulação de estados no React e boas práticas de desenvolvimento.
+
+Também possui foco em qualidade de software, aplicando validações e testes de comportamento para garantir uma melhor experiência ao usuário.
 
 ## Como executar o projeto
 
@@ -31,38 +61,18 @@ Clone o repositório:
 git clone URL_DO_REPOSITORIO
 ```
 
-Acesse a pasta do projeto:
-
-```bash
-cd cadastro-usuario
-```
-
 Instale as dependências:
 
 ```bash
 npm install
 ```
 
-Execute a aplicação:
+Execute o projeto:
 
 ```bash
 npm run dev
 ```
 
-## Conceitos praticados
+## Autor
 
-Durante o desenvolvimento foram aplicados:
-
-- Criação de componentes React
-- Uso de props
-- Renderização de listas com JavaScript
-- Organização de arquivos
-- Estilização com CSS
-
-##  Objetivo
-
-Este projeto faz parte da minha evolução no desenvolvimento Front-end, buscando aprimorar meus conhecimentos em React e boas práticas de programação.
-
-##  Desenvolvido por
-
-**Kettlem Drobinheski**
+Projeto desenvolvido para estudos e construção de portfólio na área de desenvolvimento de software.
