@@ -1,4 +1,4 @@
-export function validarCpf(cpf) {
+export function validateCPF(cpf) {
   const cpfLimpo = cpf.replace(/\D/g, '');
 
   if (cpfLimpo.length !== 11) {

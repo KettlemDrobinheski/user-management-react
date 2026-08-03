@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css'
 import UserCard from './components/UserCard'
-import { validarCpf } from './utils/validateCPF';
+import { validateCPF } from './utils/validateCPF';
 
 function App() {
   const [name, setName] = useState('')
