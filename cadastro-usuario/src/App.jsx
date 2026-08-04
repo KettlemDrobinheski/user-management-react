@@ -16,6 +16,8 @@ function App() {
   const [estado, setEstado] = useState('')
   const [mensagem, setMensagem] = useState('')
   const [festa, setFesta] = useState(false)
+  const [search, setSearch] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [users, setUsers] = useState(() => {
     const savedUsers = localStorage.getItem('users')
@@ -23,6 +25,11 @@ function App() {
     return savedUsers ? JSON.parse(savedUsers) : []
   });
   
+  const filteredUsers = users.filter((user) =>
+  user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  user.email.toLowerCase().includes(searchTerm.toLowerCase())
+)
+
   const [editingUser, setEditingUser] = useState(null);
 
   useEffect(() => {
@@ -57,23 +64,10 @@ function App() {
       return
     }
 
-    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-    if (!emailValido) {
-      console.log("CPF recusado:", cpf)
-      alert("Digite um email válido")
-      return
-    }
-
-    if (!validarCpf(cpf)) {
-      alert("Digite um CPF válido")
-      return
-    }
-
-    if (!validarCep(cep)) {
-      alert("Digite um CEP válido")
-      return
-    }
+    if (!validateCPF(cpf)) {
+  alert("Digite um CPF válido")
+  return
+}
 
     const emailExiste = users.some(
       user => user.email.toLowerCase() === email.toLowerCase()
@@ -237,6 +231,10 @@ console.log("Parametro recebidos:", cepDigitado)
   }
   }
 
+  function handleSearch() {
+  setSearchTerm(search)
+  }
+
   return (
     <div className="App">
 
@@ -343,6 +341,22 @@ console.log("Parametro recebidos:", cepDigitado)
             />
 
 
+            <div className="search-container">
+            <input
+             type="text"
+             placeholder="Pesquisar usuário..."
+             value={search}
+             onChange={(e) => setSearch(e.target.value)}
+            />
+
+  <button 
+    type="button"
+    onClick={handleSearch}
+  >
+    🔍
+  </button>
+  </div>
+
         <button type="submit">
           {editingUser ? "Atualizar" : "Cadastrar"}
         </button>
@@ -365,7 +379,7 @@ console.log("Parametro recebidos:", cepDigitado)
 
       <div className="user-list">
 
-{users.map((user) => (
+{filteredUsers.map((user) => (
       <UserCard 
       key={user.id} 
       user={user}
