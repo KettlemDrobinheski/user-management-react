@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css'
 import UserCard from './components/UserCard'
 import { validateCPF } from './utils/validateCPF';
+import { Toaster, toast } from 'react-hot-toast';
 
 function App() {
   const [name, setName] = useState('')
@@ -14,7 +15,6 @@ function App() {
   const [bairro, setBairro] = useState('')
   const [cidade, setCidade] = useState('')
   const [estado, setEstado] = useState('')
-  const [mensagem, setMensagem] = useState('')
   const [festa, setFesta] = useState(false)
   const [search, setSearch] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
@@ -45,27 +45,23 @@ function App() {
       })
   }
 
-  useEffect(() => {
-    console.log("Estado da mensagem mudou:", mensagem);
-  }, [mensagem]);
-
   function handleSubmit(event) {
     event.preventDefault()
 
     if (!name || !email || !age || !cpf || !cep || !numero) {
-      alert("preencha todos os campos")
+      toast.error("preencha todos os campos")
       return
     }
 
     const nomeValido = /^[A-Za-zÀ-ÿ\s]+$/.test(name);
 
     if (!nomeValido) {
-      alert("Digite um nome válido")
+      toast.error("Digite um nome válido")
       return
     }
 
     if (!validateCPF(cpf)) {
-  alert("Digite um CPF válido")
+  toast.error("Digite um CPF válido")
   return
 }
 
@@ -74,7 +70,7 @@ function App() {
     )
 
     if(emailExiste) {
-      alert("Esse email já está cadatrado")
+      toast.error("Esse email já está cadatrado")
       return
     }
 
@@ -83,7 +79,7 @@ function App() {
     )
 
     if (nomeExiste) {
-      alert("Esse nome já está cadastrado")
+      toast.error("Esse nome já está cadastrado")
       return
     }
 
@@ -92,7 +88,7 @@ function App() {
   )
 
   if (cpfExiste) {
-    alert("Esse CPF já está cadastrado")
+    toast.error("Esse CPF já está cadastrado")
     return
   }
 
@@ -122,7 +118,7 @@ setEditingUser(null)
       }
 
       setUsers([...users, newUser])
-      setMensagem("Usuário cadastrado com sucesso! 🎉")
+      toast.success("Usuário cadastrado com sucesso!")
 
       setFesta(true)
 
@@ -130,7 +126,6 @@ setEditingUser(null)
         setFesta(false)
       }, 3000)
 
-      console.log("Mensagem atual:", mensagem)
     }
 
     setName('')
@@ -151,6 +146,8 @@ setEditingUser(null)
     setUsers(updatedUsers)
 
     localStorage.setItem('users', JSON.stringify(updatedUsers))
+
+    toast.success("Usuário removido com sucesso!")
   }
 
    function editUser(user) {
@@ -199,7 +196,6 @@ setEditingUser(null)
   }
 
   async function buscarCep(cepDigitado) {
-console.log("Parametro recebidos:", cepDigitado)
 
     const cepLimpo = cepDigitado.replace(/\D/g, '')
 
@@ -215,8 +211,7 @@ console.log("Parametro recebidos:", cepDigitado)
     const dados = await resposta.json()
 
     if(dados.erro) {
-      console.log("API retornou erro:", dados)
-      alert("CEP não encontrado")
+      toast.error("CEP não encontrado")
       return
     }
 
@@ -226,8 +221,7 @@ console.log("Parametro recebidos:", cepDigitado)
     setEstado(dados.uf)
 
   } catch (erro) {
-    console.error("Erro ao buscar CEP:", erro)
-    alert("Erro ao buscar o CEP.")
+    toast.error("Erro ao buscar o CEP.")
   }
   }
 
@@ -236,6 +230,12 @@ console.log("Parametro recebidos:", cepDigitado)
   }
 
   return (
+    <>
+      <Toaster 
+      position="top-right"
+      reverseOrder={false}
+      />
+
     <div className="App">
 
     {festa && (
@@ -251,12 +251,6 @@ console.log("Parametro recebidos:", cepDigitado)
 )}
 
       <h1>Cadastro de Usuários</h1>
-
-      {mensagem && (
-        <p className="success-message">
-          {mensagem}
-        </p>
-      )}
 
       <p>Total de Usuarios: {users.length}</p>
 
@@ -390,6 +384,7 @@ console.log("Parametro recebidos:", cepDigitado)
       </div>
 
     </div>
+    </>
   )
 }
 
