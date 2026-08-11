@@ -1,78 +1,69 @@
-# Sistema de Cadastro de Usuários 🚀
+# Cadastro de Usuários
 
-Um sistema de cadastro de usuários desenvolvido em React, com foco em validações de dados, persistência de informações e melhoria da experiência do usuário.
+Projeto Full Stack para cadastro e gerenciamento de usuários, desenvolvido durante meus estudos de desenvolvimento web.
 
-A aplicação permite cadastrar, editar, excluir e gerenciar usuários, além de realizar a busca automática de endereço através do CEP utilizando uma API externa.
+## 🚀 Tecnologias
 
-## Funcionalidades ✨
+### Frontend
+- React
+- Vite
+- JavaScript
+- CSS
+- React Hot Toast
 
-* Cadastro de usuários
-* Edição de usuários
-* Exclusão de usuários
-* Persistência dos dados utilizando LocalStorage
-* Validação e máscara de CPF
-* Validação e máscara de CEP
-* Busca automática de endereço através do CEP (ViaCEP)
-* Preenchimento automático de:
+### Backend
+- Node.js
+- Express
+- PostgreSQL
+- API REST
 
-  * Rua
-  * Bairro
-  * Cidade
-  * Estado
-* Cadastro do número da residência
-* Verificação de dados duplicados:
+### Ferramentas
+- Git
+- GitHub
+- VS Code
+- Thunder Client
 
-  * Nome
-  * Email
-  * CPF
-* Mensagens de sucesso após ações realizadas
-* Animação de comemoração após cadastro realizado com sucesso 🎉
+## ✨ Funcionalidades
 
-## Tecnologias utilizadas 💻
+### Frontend
+- Cadastro de usuários
+- Validação de CPF
+- Validação de nome e e-mail
+- Formatação de CPF
+- Busca automática de endereço através do CEP
+- Pesquisa de usuários por nome ou e-mail
+- Edição de usuários
+- Exclusão de usuários
+- Persistência de dados
+- Mensagens de sucesso e erro
 
-* React
-* JavaScript
-* HTML5
-* CSS3
-* Vite
-* API ViaCEP
-* LocalStorage
+### Backend
+- API REST com Node.js e Express
+- Conexão com PostgreSQL
+- `GET /usuarios`
+- `POST /usuarios`
+- Cadastro de usuários diretamente no banco de dados
+- Tratamento de erros
 
-## Validações implementadas 🛡️
+## 🗂️ Estrutura do projeto
 
-* Campos obrigatórios
-* Validação de nome
-* Validação de email
-* Validação matemática de CPF
-* Validação de CEP
-* Bloqueio de cadastros duplicados
-
-## Objetivo do projeto 🎯
-
-Este projeto foi desenvolvido para praticar conceitos de desenvolvimento Front-End, consumo de APIs, manipulação de estados no React e boas práticas de desenvolvimento.
-
-Também possui foco em qualidade de software, aplicando validações e testes de comportamento para garantir uma melhor experiência ao usuário.
-
-## Como executar o projeto
-
-Clone o repositório:
-
-```bash
-git clone URL_DO_REPOSITORIO
-```
-
-Instale as dependências:
-
-```bash
-npm install
-```
-
-Execute o projeto:
-
-```bash
-npm run dev
-```
-
-## Autor
-
-Projeto desenvolvido para estudos e construção de portfólio na área de desenvolvimento de software.
+```text
+cadastro-usuario/
+│
+├── src/
+│   ├── components/
+│   ├── tests/
+│   ├── utils/
+│   ├── App.jsx
+│   └── App.css
+│
+├── user-management-api/
+│   ├── db.js
+│   ├── server.js
+│   ├── test-db.js
+│   ├── .env
+│   └── package.json
+│
+├── package.json
+├── vite.config.js
+└── README.md
