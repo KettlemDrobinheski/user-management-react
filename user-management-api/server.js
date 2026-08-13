@@ -62,3 +62,74 @@ app.post('/usuarios', async (req, res) => {
     })
   }
 })
+
+app.put('/usuarios/:id', async (req, res) => {
+  try {
+  const { id } = req.params
+
+  const {
+  nome,
+  cpf,
+  email,
+  idade,
+  cep,
+  rua,
+  numero,
+  bairro,
+  cidade,
+  estado
+} = req.body
+
+const resultado = await pool.query(
+  `UPDATE usuarios
+  SET
+    nome = $1,
+    cpf = $2,
+    email = $3,
+    idade = $4,
+    cep = $5,
+    rua = $6,
+    numero = $7,
+    bairro = $8,
+    cidade = $9,
+    estado = $10
+  WHERE id = $11
+  RETURNING *`,
+[
+  nome,
+  cpf,
+  email,
+  idade,
+  cep,
+  rua,
+  numero,
+  bairro,
+  cidade,
+  estado,
+  id
+]
+)
+res.json(resultado.rows[0])
+
+} catch (erro) {
+  console.error(erro)
+
+  res.status(500).json({
+    erro: 'Erro ao atualizar usuário'
+  })
+}
+})
+
+app.delete('/usuarios/:id', async (req, res) => {
+  const { id } = req.params
+
+  const resultado = await pool.query(
+  `DELETE FROM usuarios
+   WHERE id = $1`,
+  [id]
+)
+
+res.json({
+  mensagem: 'Usuário excluído com sucesso'
+})
+})
