@@ -5,6 +5,18 @@ const app = express()
 
 app.use(express.json())
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204)
+  }
+
+  next()
+})
+
 const PORT = 3000
 
 app.get('/', (req, res) => {
@@ -121,15 +133,26 @@ res.json(resultado.rows[0])
 })
 
 app.delete('/usuarios/:id', async (req, res) => {
-  const { id } = req.params
+  try {
+    const { id } = req.params
 
-  const resultado = await pool.query(
-  `DELETE FROM usuarios
-   WHERE id = $1`,
-  [id]
-)
+    const resultado = await pool.query(
+      `DELETE FROM usuarios
+       WHERE id = $1
+       RETURNING *`,
+      [id]
+    )
 
-res.json({
-  mensagem: 'Usuário excluído com sucesso'
-})
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({ erro: 'Usuário não encontrado' })
+    }
+
+    res.json({
+      mensagem: 'Usuário excluído com sucesso',
+      usuario: resultado.rows[0]
+    })
+  } catch (erro) {
+    console.error(erro)
+    res.status(500).json({ erro: 'Erro ao excluir usuário' })
+  }
 })

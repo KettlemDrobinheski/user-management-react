@@ -30,6 +30,7 @@ function App() {
   user.email.toLowerCase().includes(searchTerm.toLowerCase())
 )
 
+
   const [editingUser, setEditingUser] = useState(null);
 
   useEffect(() => {
@@ -140,14 +141,25 @@ setEditingUser(null)
     setEstado('')
   }
 
-  function deleteUser(id) {
-    const updatedUsers = users.filter((user) => user.id !== id)
+  async function deleteUser(id) {
+    try {
+      const resposta = await fetch(`http://localhost:3000/usuarios/${id}`, {
+        method: 'DELETE'
+      })
 
-    setUsers(updatedUsers)
+      if (!resposta.ok) {
+        const dados = await resposta.json()
+        throw new Error(dados.erro || 'Não foi possível excluir o usuário')
+      }
 
-    localStorage.setItem('users', JSON.stringify(updatedUsers))
+      setUsers((usuariosAtuais) =>
+        usuariosAtuais.filter((user) => user.id !== id)
+      )
 
-    toast.success("Usuário removido com sucesso!")
+      toast.success("Usuário removido com sucesso!")
+    } catch (erro) {
+      toast.error(erro.message || 'Erro ao excluir usuário')
+    }
   }
 
    function editUser(user) {
