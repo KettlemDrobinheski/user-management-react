@@ -37,6 +37,41 @@ function App() {
     localStorage.setItem('users', JSON.stringify(users))
   }, [users])
 
+  useEffect(() => {
+  async function carregarUsuarios() {
+    try {
+      const resposta = await fetch('http://localhost:3000/usuarios')
+
+      if (!resposta.ok) {
+        throw new Error('Erro ao buscar usuários')
+      }
+
+     const dados = await resposta.json()
+
+const usuariosFormatados = dados.map((usuario) => ({
+  id: usuario.id,
+  name: usuario.nome,
+  cpf: usuario.cpf,
+  email: usuario.email,
+  age: usuario.idade,
+  cep: usuario.cep,
+  rua: usuario.rua,
+  numero: usuario.numero,
+  bairro: usuario.bairro,
+  cidade: usuario.cidade,
+  estado: usuario.estado
+}))
+
+setUsers(usuariosFormatados)
+
+    } catch (erro) {
+      console.error(erro)
+      toast.error('Não foi possível carregar os usuários')
+    }
+  }
+
+  carregarUsuarios()
+}, [])
 
   function buscarUsuarios() {
     fetch('https://jsonplaceholder.typicode.com/users')
@@ -46,46 +81,52 @@ function App() {
       })
   }
 
-  function handleSubmit(event) {
-    event.preventDefault()
+ async function handleSubmit(event) {
+  event.preventDefault()
 
-    if (!name || !email || !age || !cpf || !cep || !numero) {
-      toast.error("preencha todos os campos")
-      return
-    }
+  if (!name || !email || !age || !cpf || !cep || !numero) {
+    toast.error("preencha todos os campos")
+    return
+  }
 
-    const nomeValido = /^[A-Za-zÀ-ÿ\s]+$/.test(name);
+  const nomeValido = /^[A-Za-zÀ-ÿ\s]+$/.test(name)
 
-    if (!nomeValido) {
-      toast.error("Digite um nome válido")
-      return
-    }
+  if (!nomeValido) {
+    toast.error("Digite um nome válido")
+    return
+  }
 
-    if (!validateCPF(cpf)) {
-  toast.error("Digite um CPF válido")
-  return
-}
+  if (!validateCPF(cpf)) {
+    toast.error("Digite um CPF válido")
+    return
+  }
 
-    const emailExiste = users.some(
-      user => user.email.toLowerCase() === email.toLowerCase()
-    )
+  const emailExiste = users.some(
+    user =>
+      user.email.toLowerCase() === email.toLowerCase() &&
+      user.id !== editingUser?.id
+  )
 
-    if(emailExiste) {
-      toast.error("Esse email já está cadatrado")
-      return
-    }
+  if (emailExiste) {
+    toast.error("Esse email já está cadastrado")
+    return
+  }
 
-    const nomeExiste = users.some(
-      user => user.name.toLowerCase() === name.toLowerCase()
-    )
+  const nomeExiste = users.some(
+    user =>
+      user.name.toLowerCase() === name.toLowerCase() &&
+      user.id !== editingUser?.id
+  )
 
-    if (nomeExiste) {
-      toast.error("Esse nome já está cadastrado")
-      return
-    }
+  if (nomeExiste) {
+    toast.error("Esse nome já está cadastrado")
+    return
+  }
 
   const cpfExiste = users.some(
-    user => user.cpf.replace(/\D/g, '') === cpf.replace(/\D/g, '')
+    user =>
+      user.cpf.replace(/\D/g, '') === cpf.replace(/\D/g, '') &&
+      user.id !== editingUser?.id
   )
 
   if (cpfExiste) {
@@ -93,32 +134,120 @@ function App() {
     return
   }
 
-    if (editingUser) {
-      const updatedUsers = users.map((user) =>
-      user.id === editingUser.id
-    ? { ...user, name, cpf, email, age }
-    : user
-)
+  if (editingUser) {
+  try {
+    const resposta = await fetch(
+      `http://localhost:3000/usuarios/${editingUser.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nome: name,
+          cpf,
+          email,
+          idade: age,
+          cep,
+          rua,
+          numero,
+          bairro,
+          cidade,
+          estado
+        })
+      }
+    )
 
-setUsers (updatedUsers)
-setEditingUser(null)
+    if (!resposta.ok) {
+      const dados = await resposta.json()
+      throw new Error(dados.erro || 'Erro ao atualizar usuário')
+    }
 
-    } else {
-      const newUser = {
-        id: Date.now(),
-        name,
-        cpf,
-        email,
-        age,
-        cep,
-        rua,
-        numero,
-        bairro,
-        cidade,
-        estado,
+    const usuarioAtualizado = await resposta.json()
+
+    const usuarioFormatado = {
+      id: usuarioAtualizado.id,
+      name: usuarioAtualizado.nome,
+      cpf: usuarioAtualizado.cpf,
+      email: usuarioAtualizado.email,
+      age: usuarioAtualizado.idade,
+      cep: usuarioAtualizado.cep,
+      rua: usuarioAtualizado.rua,
+      numero: usuarioAtualizado.numero,
+      bairro: usuarioAtualizado.bairro,
+      cidade: usuarioAtualizado.cidade,
+      estado: usuarioAtualizado.estado
+    }
+
+    setUsers((usuariosAtuais) =>
+      usuariosAtuais.map((user) =>
+        user.id === usuarioFormatado.id
+          ? usuarioFormatado
+          : user
+      )
+    )
+
+    setEditingUser(null)
+
+    toast.success("Usuário atualizado com sucesso!")
+
+  } catch (erro) {
+    console.error(erro)
+    toast.error(erro.message || "Erro ao atualizar usuário")
+    return
+  }
+}else {
+
+    setUsers(updatedUsers)
+    setEditingUser(null)
+
+    toast.success("Usuário atualizado com sucesso!")
+    try {
+      const resposta = await fetch('http://localhost:3000/usuarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nome: name,
+          cpf,
+          email,
+          idade: age,
+          cep,
+          rua,
+          numero,
+          bairro,
+          cidade,
+          estado
+        })
+      })
+
+      if (!resposta.ok) {
+        const dados = await resposta.json()
+        throw new Error(dados.erro || 'Erro ao cadastrar usuário')
       }
 
-      setUsers([...users, newUser])
+      const usuarioCriado = await resposta.json()
+
+      const usuarioFormatado = {
+        id: usuarioCriado.id,
+        name: usuarioCriado.nome,
+        cpf: usuarioCriado.cpf,
+        email: usuarioCriado.email,
+        age: usuarioCriado.idade,
+        cep: usuarioCriado.cep,
+        rua: usuarioCriado.rua,
+        numero: usuarioCriado.numero,
+        bairro: usuarioCriado.bairro,
+        cidade: usuarioCriado.cidade,
+        estado: usuarioCriado.estado
+      }
+
+      setUsers((usuariosAtuais) => [
+        ...usuariosAtuais,
+        usuarioFormatado
+      ])
+
       toast.success("Usuário cadastrado com sucesso!")
 
       setFesta(true)
@@ -127,19 +256,24 @@ setEditingUser(null)
         setFesta(false)
       }, 3000)
 
+    } catch (erro) {
+      console.error(erro)
+      toast.error(erro.message || "Erro ao cadastrar usuário")
+      return
     }
-
-    setName('')
-    setCpf('')
-    setEmail('')
-    setAge('')
-    setCep('')
-    setRua('')
-    setNumero('')
-    setBairro('')
-    setCidade('')
-    setEstado('')
   }
+
+  setName('')
+  setCpf('')
+  setEmail('')
+  setAge('')
+  setCep('')
+  setRua('')
+  setNumero('')
+  setBairro('')
+  setCidade('')
+  setEstado('')
+}
 
   async function deleteUser(id) {
     try {
