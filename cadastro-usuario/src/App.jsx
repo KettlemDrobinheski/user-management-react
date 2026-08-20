@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import './App.css'
 import UserCard from './components/UserCard'
 import { validateCPF } from './utils/validateCPF';
+import { validateAge } from './utils/validateAge';
+import { validateEmail } from './utils/validateEmail';
 import { Toaster, toast } from 'react-hot-toast';
 
 function App() {
@@ -88,6 +90,16 @@ setUsers(usuariosFormatados)
     toast.error("preencha todos os campos")
     return
   }
+
+  if (!validateAge(age)) {
+  toast.error("Você deve ter pelo menos 18 anos")
+  return
+}
+
+if (!validateEmail(email)) {
+  toast.error("Digite um e-mail válido")
+  return
+}
 
   const nomeValido = /^[A-Za-zÀ-ÿ\s]+$/.test(name)
 
@@ -197,11 +209,6 @@ setUsers(usuariosFormatados)
     return
   }
 }else {
-
-    setUsers(updatedUsers)
-    setEditingUser(null)
-
-    toast.success("Usuário atualizado com sucesso!")
     try {
       const resposta = await fetch('http://localhost:3000/usuarios', {
         method: 'POST',
