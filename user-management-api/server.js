@@ -5,9 +5,23 @@ const app = express()
 
 app.use(express.json())
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://kettlemdrobinheski.github.io'
+]
+
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  const origin = req.headers.origin
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin)
+  }
+
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  )
+
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
   if (req.method === 'OPTIONS') {
@@ -17,7 +31,7 @@ app.use((req, res, next) => {
   next()
 })
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
   res.send('API funcionando!')
@@ -35,10 +49,6 @@ app.get('/usuarios', async (req, res) => {
       erro: 'Erro ao buscar usuários'
     })
   }
-})
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`)
 })
 
 app.post('/usuarios', async (req, res) => {
@@ -155,4 +165,8 @@ app.delete('/usuarios/:id', async (req, res) => {
     console.error(erro)
     res.status(500).json({ erro: 'Erro ao excluir usuário' })
   }
+})
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`)
 })
