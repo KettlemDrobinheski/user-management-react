@@ -1,7 +1,6 @@
 import './UserCard.css'
 
-function UserCard({ user, onDelete, onEdit }) {
-  console.log(onEdit);
+function UserCard({ user, onDelete, onEdit, busy }) {
     return(
         <div className="user-card">
             <img 
@@ -24,9 +23,9 @@ function UserCard({ user, onDelete, onEdit }) {
               </div>
 
               <div className="user-card-buttons">
-                <button onClick={() => onEdit(user)}>Editar</button>
+                <button type="button" aria-disabled={busy} onClick={() => onEdit(user)}>Editar</button>
 
-              <button onClick={() => onDelete(user.id)}>Excluir</button>
+              <button type="button" aria-disabled={busy} onClick={(event) => onDelete(user, event.currentTarget)}>Excluir</button>
             </div>
         </div>
     )
